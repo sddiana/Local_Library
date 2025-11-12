@@ -3,8 +3,8 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('books/', views.book_list, name='books'),
-    re_path(r'^book/(?P<pk>\d+)/$', views.book_detail, name='book-detail'),
-    path('authors/', views.author_list, name='authors'),
-    path('author/<int:pk>/', views.author_detail, name='author-detail'),
+    re_path(r'books/$', views.BookListView.as_view(), name='books'), 
+    re_path(r'^book/(?P<pk>\d+)/$', views.BookDetailView.as_view(), name='book-detail'),
+    re_path(r'^authors/$', views.AuthorListView.as_view(), name='authors'),
+    re_path(r'^author/(?P<pk>\d+)/$', views.AuthorDetailView.as_view(), name='author-detail'),
 ]

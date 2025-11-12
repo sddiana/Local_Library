@@ -1,5 +1,6 @@
-from django.shortcuts import render, get_object_or_404
-from .models import Book, Author, BookInstance, Genre  # ← ДОБАВЬТЕ ИМПОРТ!
+from django.shortcuts import render
+from django.views import generic
+from .models import Book, Author, BookInstance, Genre
 
 def index(request):
     """
@@ -33,26 +34,31 @@ def index(request):
         },
     )
 
-def book_list(request):
-    books = Book.objects.all().order_by('title')
-    return render(request, 'catalog/book_list.html', {
-        'book_list': books
-    })
+class BookListView(generic.ListView):
+    model = Book
+    template_name = 'catalog/book_list.html'
+    context_object_name = 'book_list'
+    
+    def get_queryset(self):
+        return Book.objects.all().order_by('title')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['some_data'] = 'This is just some data'
+        return context
 
-def book_detail(request, pk):
-    book = get_object_or_404(Book, pk=pk)
-    return render(request, 'catalog/book_detail.html', {
-        'book': book
-    })
+class BookDetailView(generic.DetailView):
+    model = Book
+    template_name = 'catalog/book_detail.html'
 
-def author_list(request):
-    authors = Author.objects.all().order_by('last_name', 'first_name')
-    return render(request, 'catalog/author_list.html', {
-        'author_list': authors
-    })
+class AuthorListView(generic.ListView):
+    model = Author
+    template_name = 'catalog/author_list.html'
+    context_object_name = 'author_list'
+    
+    def get_queryset(self):
+        return Author.objects.all().order_by('last_name', 'first_name')
 
-def author_detail(request, pk):
-    author = get_object_or_404(Author, pk=pk)
-    return render(request, 'catalog/author_detail.html', {
-        'author': author
-    })
+class AuthorDetailView(generic.DetailView):
+    model = Author
+    template_name = 'catalog/author_detail.html'
