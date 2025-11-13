@@ -3,7 +3,7 @@
 {% block content %}
   <h1>Title: {{ book.title }}</h1>
 
-  <!--<p><strong>Author:</strong> <a href="">{{ book.author }}</a></p> <! <a href="{% url 'author-detail' book.author.pk %}">{{ book.author }}</a> -->
+  <p><strong>Author:</strong> <a href="{% url 'author-detail' book.author.pk %}">{{ book.author }}</a>
   <p><strong>Summary:</strong> {{ book.summary }}</p>
   <p><strong>ISBN:</strong> {{ book.isbn }}</p>
   <p><strong>Language:</strong> {{ book.language }}</p>
@@ -20,4 +20,14 @@
     <p class="text-muted"><strong>Id:</strong> {{copy.id}}</p>
     {% endfor %}
   </div>
+  {% if perms.catalog.change_book or perms.catalog.delete_book %}
+<div>
+  {% if perms.catalog.change_book %}
+    <a href="{% url 'book_update' book.pk %}" class="btn btn-primary">Edit Book</a>
+  {% endif %}
+  {% if perms.catalog.delete_book %}
+    <a href="{% url 'book_delete' book.pk %}" class="btn btn-danger">Delete Book</a>
+  {% endif %}
+</div>
+{% endif %}
 {% endblock %}

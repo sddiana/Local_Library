@@ -23,5 +23,13 @@
     {% else %}
         <p>This author has no books in the library.</p>
     {% endif %}
+    <div>
+  {% if perms.catalog.change_author %}
+    <a href="{% url 'author_update' author.pk %}" class="btn btn-primary">Edit Author</a>
+  {% endif %}
+  {% if perms.catalog.delete_author %}
+    <a href="{% url 'author_delete' author.pk %}" class="btn btn-danger">Delete Author</a>
+  {% endif %}
+</div>
 </div>
 {% endblock %}
