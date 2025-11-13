@@ -1,10 +1,19 @@
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.views.generic import RedirectView
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.generic import TemplateView
+from catalog import views 
 
 urlpatterns = [   
     path('admin/', admin.site.urls),
-    path('catalog/', include('catalog.urls')),path('',
-    RedirectView.as_view(url='/catalog/', permanent=True)), ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    path('catalog/', include('catalog.urls')),
+    re_path(r'^mybooks/$', views.LoanedBooksByUserListView.as_view(), name='my-borrowed'),
+    path('all-borrowed/', views.AllBorrowedBooksListView.as_view(), name='all-borrowed'),
+    path('', RedirectView.as_view(url='/catalog/', permanent=True)),
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    
+urlpatterns += [
+    path('accounts/', include('django.contrib.auth.urls')),
+]

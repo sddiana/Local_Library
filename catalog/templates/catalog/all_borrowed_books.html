@@ -1,0 +1,24 @@
+{% extends "catalog/base_generic.html" %}
+
+{% block content %}
+<h1>Все заимствованные книги</h1>
+
+{% if bookinstance_list %}
+  {% for bookinst in bookinstance_list %}
+    <div class="{% if bookinst.is_overdue %}text-danger{% endif %}">
+      <p>
+        <strong>{{ bookinst.book.title }}</strong> | 
+        Заемщик: {{ bookinst.borrower.get_username }} | 
+        Вернуть до: {{ bookinst.due_back }} | 
+        {% if bookinst.is_overdue %}
+          <span class="text-danger">Просрочено</span>
+        {% else %}
+          <span class="text-success">В займе</span>
+        {% endif %}
+      </p>
+    </div>
+  {% endfor %}
+{% else %}
+  <p>Нет заимствованных книг.</p>
+{% endif %}
+{% endblock %}
